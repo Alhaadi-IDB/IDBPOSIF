@@ -1,0 +1,140 @@
+﻿Imports System
+Imports System.Net
+Imports System.Net.Sockets
+Imports System.Threading
+Imports Newtonsoft.Json.Linq
+
+Module mdIDBPOSIFServer
+
+    Private DoStop As Boolean = False
+    Private xPrintBill As [Object]
+    Public msActionType As String = ""
+
+    Public Sub OnStart()
+        Dim t As Thread
+        ' Add code here to start your service. This method should set things
+        ' in motion so your service can do its work.
+
+        Log("IDBPOSIF WebServer started")
+        ' Start the webserver on a thread then exit
+        t = New Thread(AddressOf StartServer)
+
+        ' Run the service thread in the background
+        ' as low priority, as to not take up the
+        ' processor
+        t.IsBackground = True
+        t.Priority = ThreadPriority.BelowNormal
+        t.Start()
+
+        ' NOTE If you want to convert this from
+        ' a Service application to a standard app
+        ' In your form load, new or main sub just call StartServer
+
+    End Sub
+
+    Public Sub OnStop()
+        ' This is called when the service is stopped.
+        ' Log that the service is stopped
+        Log("IDBPOSIF WebServer stopped")
+
+        ' set the dostop variable so the thread exits
+        ' normally
+        DoStop = True
+    End Sub
+
+    Public Sub StartAgain()
+        ' This is called when the service is stopped.
+        ' Log that the service is stopped
+        Log("IDBPOSIF WebServer StartAgain")
+
+        ' set the dostop variable so the thread exits
+        ' normally
+        DoStop = False
+    End Sub
+
+    Public Sub StartServer()
+
+        ' Get IP address of the adapter to run the server on
+        ' All configuration settings are stored in condig.ini
+        Dim address As IPAddress = IPAddress.Parse(ReadSetting.ReadString("Interface Server", "IPAddress", "127.0.0.1"))
+
+        ' map the end point with IP Address and Port
+        Dim EndPoint As IPEndPoint
+
+        If (mbServeAsPrintServer) Then
+            EndPoint = New IPEndPoint(IPAddress.Any, Int32.Parse(ReadSetting.ReadString("Interface Server", "Port", "80")))
+        Else
+            EndPoint = New IPEndPoint(address, Int32.Parse(ReadSetting.ReadString("Interface Server", "Port", "80")))
+        End If
+
+        ' Create a new socket and bind it to the address and port and listen.
+        Dim ss As Socket = New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+        Log("Listening on: " & ReadSetting.ReadString("IDBPOSIF Server", "IPAddress", "127.0.0.1") & " Port: " & ReadSetting.ReadString("Interface Server", "Port", "80"))
+
+        Dim sSocketError As String = ""
+        Try
+            If ss.IsBound Then ss.Close()
+            ss.Bind(EndPoint)
+            ss.Listen(1)
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            Exit Sub
+        End Try
+
+        Dim WebRoot As String = ReadSetting.ReadString("GENERAL", "WebServerPath", "c:\")
+        Dim DefaultPage As String = ReadSetting.ReadString("GENERAL", "DefaultPage", "default.htm")
+
+        Do While Not DoStop
+            ' Wait for an incoming connections
+            Dim sock As Socket = ss.Accept()
+
+            ' Connection accepted
+
+            ' Initialise the Server class
+            Dim ServerRun As New Server(sock, WebRoot, DefaultPage)
+
+            ' Create a new thread to handle the connection
+            Dim t As Thread = New Thread(AddressOf ServerRun.HandleConnection)
+
+            t.SetApartmentState(ApartmentState.MTA)
+            t.IsBackground = True
+            t.Priority = ThreadPriority.BelowNormal
+            t.Start()
+
+            ' Loop and wait for more connections
+        Loop
+    End Sub
+
+    Public Function fnCallGhostScript(ByVal sPrintName As String, ByVal sFileName As String, ByRef sErrMessage As String) As Boolean
+        Try
+            Dim startInfo As New ProcessStartInfo
+            Dim sArguments As String = " -dPrinted -dBATCH -dNOPAUSE -q -dNumCopies=1 -dDEVICEHEIGHTPOINTS=9287" & " -sDEVICE=mswinpr2 -sOutputICCProfile=default_gray.icc -sOutputFile=""%printer%" & sPrintName & """" + " """ + sFileName + """"
+            startInfo.Arguments = sArguments
+            startInfo.FileName = msGhostscriptPath
+            startInfo.UseShellExecute = False
+            startInfo.RedirectStandardError = True
+            startInfo.RedirectStandardOutput = True
+            startInfo.CreateNoWindow = True
+            Dim prProcess As Process = Process.Start(startInfo)
+
+            prProcess.WaitForExit(30000)
+
+            If (prProcess.HasExited = False) Then
+                prProcess.Kill()
+            End If
+
+            'delete the file here
+            '     My.Computer.FileSystem.DeleteFile(sFileName)
+            Return prProcess.ExitCode = 0
+
+        Catch ex As Exception
+
+            sErrMessage = ex.Message
+            Return False
+
+        End Try
+
+
+    End Function
+
+End Module

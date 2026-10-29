@@ -1,0 +1,200 @@
+﻿Imports System.IO
+Imports System.ComponentModel
+Imports System.Threading
+Imports System.Printing
+Imports MonitoredApplication
+
+Module mdMain
+    Public msServerUrl As String
+    Public InitializeFile As String = Application.StartupPath & "\config.ini"
+    Public ReadSetting As New Org.Mentalis.Files.IniReader(InitializeFile)
+    Public msErrorMsg As String = ""
+    Public msGhostscriptPath As String = ""
+    Public msCashierPrinter As String = ""
+    Public msPrinterModel As String = ""
+    Private prn As New cRawPrinterHelper
+    Public mbServeAsPrintServer As Boolean
+    Private callbackFunc As clsBXLAPI.StatusCallBackDelegate = Nothing
+    Private BXLAPI As New clsBXLAPI
+
+    'watchdog
+    Public mWatchdogWatcher As WatchdogWatcher
+
+    Public watchdogLockFileName As String = "watchdoglock"
+
+    'websocket
+    Public mbPrintServerUseWebsocket As Boolean
+    Public msPrintServerUseWebsocketServerUrl As String
+
+    Public Sub Log_bak(ByVal txt As String)
+        Dim sw As StreamWriter
+
+        Dim logfile As String = Replace(Mid(Environment.CommandLine, 1, InStrRev(Environment.CommandLine, "\") - 1) & "\log.txt", Chr(34), "")
+        If Not File.Exists(logfile) Then
+            sw = File.CreateText(logfile)
+        Else
+            sw = File.AppendText(logfile)
+        End If
+        sw.WriteLine(Now.ToShortDateString & " " & Now.ToShortTimeString & ": " & txt)
+        sw.Flush()
+        sw.Close()
+
+
+    End Sub
+
+    Public Sub Log(ByVal txt As String)
+        Try
+            Dim sw As StreamWriter
+
+            If Not Directory.Exists(Application.StartupPath & "\log") Then
+                Directory.CreateDirectory(Application.StartupPath & "\log")
+            End If
+
+            Dim logfile As String = Application.StartupPath & "\log\log_" & Now.ToString("yyyyMMdd") & ".txt"
+            If Not File.Exists(logfile) Then
+                sw = File.CreateText(logfile)
+            Else
+                sw = File.AppendText(logfile)
+            End If
+            sw.WriteLine(Now.ToString("dd/MM/yyyy") & " " & Now.ToLongTimeString & ": " & txt)
+            sw.Flush()
+            sw.Close()
+
+        Catch ex As Exception
+            Dim sw2 As StreamWriter
+
+            If Not Directory.Exists(Application.StartupPath & "\log") Then
+                Directory.CreateDirectory(Application.StartupPath & "\log")
+            End If
+
+            Dim logfile2 As String = Application.StartupPath & "\log\log_" & Now.ToString("yyyyMMdd") & "_2.txt"
+            If Not File.Exists(logfile2) Then
+                sw2 = File.CreateText(logfile2)
+            Else
+                sw2 = File.AppendText(logfile2)
+            End If
+            sw2.WriteLine(Now.ToShortDateString & " " & Now.ToLongTimeString & ": " & txt)
+            sw2.Flush()
+            sw2.Close()
+        Finally
+
+        End Try
+
+    End Sub
+
+    Public Sub ReadSettings()
+        msCashierPrinter = ReadSetting.ReadString("Interface Server", "CashierPrinter", "")
+        If (msCashierPrinter.Length = 0) Then
+            MsgBox("Please setup the cashier printer!", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "IDBPOSIf")
+        End If
+
+        msServerUrl = ReadSetting.ReadString("Interface Server", "ServerUrl", "")
+        If (msServerUrl.EndsWith("/")) Then msServerUrl += "/"
+
+        msGhostscriptPath = ReadSetting.ReadString("Interface Server", "GhostscriptPath", "")
+        If (msGhostscriptPath.Length = 0) Then
+            MsgBox("Please setup the Ghostscript Path!", MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "IDBPOSIf")
+        End If
+
+        mbServeAsPrintServer = ReadSetting.ReadBoolean("Interface Server", "ServeAsPrintServer", False)
+
+        msPrinterModel = ReadSetting.ReadString("Interface Server", "printerModel")
+
+        mbPrintServerUseWebsocket = ReadSetting.ReadBoolean("PrintServer", "UseWebsocket")
+        msPrintServerUseWebsocketServerUrl = ReadSetting.ReadString("PrintServer", "WebsocketAddress")
+
+    End Sub
+
+
+    Public Function fnKickDrawer(ByVal sData As String, ByRef sReturnData As String) As Boolean
+        Dim sErrorMsg As String = ""
+        If msPrinterModel = "BIXOLON SRP-275III USB" Then
+            Dim strPort As String = ""
+            Dim nInterface As Integer = 2
+            Dim nBaudrate As Integer = 9100
+            Dim nDatabits As Integer = 8
+            Dim nParity As Integer = 0
+            Dim nStopbits As Integer = 0
+
+            Dim retryNo As Integer
+            Dim result As Integer
+
+            Thread.Sleep(3000)
+            Dim printServer As New LocalPrintServer()
+            Dim printQueue As PrintQueue = printServer.GetPrintQueue(msCashierPrinter)
+            Dim iPrintQueueTimeout As Integer
+            While (printQueue.NumberOfJobs <> 0)
+                printQueue = printServer.GetPrintQueue(msCashierPrinter)
+                Thread.Sleep(1000)
+                iPrintQueueTimeout += 1
+                If iPrintQueueTimeout > 30 Then
+                    sReturnData = "Printing error, kick drawer action suspended."
+                    Return False
+                End If
+            End While
+
+            For retryNo = 1 To 30
+                result = BXLAPI.PrinterOpen(nInterface, strPort, nBaudrate, nDatabits, nParity, nStopbits)
+                Thread.Sleep(100)
+                If result = 0 Then
+                    Exit For
+                End If
+            Next
+
+            If (result <> 0) Then
+                sReturnData = "Unable to connect to printer, please retry to kick drawer."
+                Return False
+            End If
+            BXLAPI.OpenDrawer(DRAWER.BXL_CASHDRAWER_PIN2)
+            BXLAPI.PrinterClose()
+        Else
+            If Not fnOpenPrinterESCPOS(sErrorMsg) Then
+                sReturnData = "Not able to open printer!  " & sErrorMsg
+                Return False
+            End If
+
+            PrintESCPOS(cESCPOS.eDrawer)
+
+            If Not fnClosePrinterESCPOS(sErrorMsg) Then
+                sReturnData = "Not able to close printer!  " & sErrorMsg
+                Return False
+            End If
+        End If
+
+
+        Return True
+
+    End Function
+
+    Public Function fnOpenPrinterESCPOS(ByRef sReturnData As String) As Boolean
+
+        Try
+            prn.OpenPrint(msCashierPrinter)
+        Catch ex As Exception
+            sReturnData = ex.Message
+            Return False
+        End Try
+        Return True
+
+    End Function
+
+
+    Public Function fnClosePrinterESCPOS(ByRef sReturnData As String) As Boolean
+        Try
+            prn.ClosePrint()
+        Catch ex As Exception
+            sReturnData = ex.Message
+            Return False
+        End Try
+
+        Return True
+    End Function
+
+    Public Sub PrintESCPOS(Line As String)
+        prn.SendStringToPrinter(msCashierPrinter, Line)
+    End Sub
+
+
+
+
+End Module

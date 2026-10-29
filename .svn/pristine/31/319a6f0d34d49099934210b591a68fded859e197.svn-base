@@ -1,0 +1,15 @@
+[Interface Server]
+Server=https://app.idbtech.cloud/pos/
+Port=81
+GhostscriptPath =C:\Program Files (x86)\gs\gs9.27\bin\gswin32c.exe
+cashierPrinter =Star BSC10
+printerModel=
+
+http://192.168.1.117/?ActionType=PrintReceipt&1&1001&PANI&PANI&Cashier
+http://192.168.1.117/?ActionType=PrintOrderChit&TM-T88V&1566967874535_orderchit&PANI&PANI
+ServeAsPrintServer=True
+IPAddress=127.0.0.1
+ServerUrl=https://fo.ap.ngrok.io/IDBPos
+[PrintServer]
+UseWebsocket=True
+WebsocketAddress=wss://fo.ap.ngrok.io/IDBPos/ws/websocket/TSKL/192.168.0.44

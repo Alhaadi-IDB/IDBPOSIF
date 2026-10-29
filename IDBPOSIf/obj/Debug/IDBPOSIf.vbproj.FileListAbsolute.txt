@@ -1,0 +1,60 @@
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.pdb
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.xml
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbprojResolveAssemblyReference.cache
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Form1.resources
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Resources.resources
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.GenerateResource.Cache
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.exe
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.xml
+E:\Project\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.pdb
+E:\Project\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe.config
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.exe
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.xml
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.pdb
+E:\Project\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe
+E:\Project\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.pdb
+E:\Project\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.xml
+E:\Project\IDBPOSIf\IDBPOSIf\bin\Debug\Newtonsoft.Json.dll
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbprojResolveAssemblyReference.cache
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Form1.resources
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Resources.resources
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.GenerateResource.Cache
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmSettings.resources
+E:\Project\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmSettingsPassword.resources
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe.config
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.pdb
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.xml
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbprojAssemblyReference.cache
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Form1.resources
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmSettings.resources
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmSettingsPassword.resources
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Resources.resources
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.GenerateResource.cache
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.CoreCompileInputs.cache
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.CopyComplete
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.exe
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.xml
+C:\Users\Thianchai\Documents\IDB Projects\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.pdb
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.AssemblyReference.cache
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.SuggestedBindingRedirects.cache
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.exe
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.xml
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.pdb
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe.config
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.exe
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.pdb
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\IDBPOSIf.xml
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\Newtonsoft.Json.dll
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Form1.resources
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmSettings.resources
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmSettingsPassword.resources
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.Resources.resources
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.GenerateResource.cache
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.CoreCompileInputs.cache
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.vbproj.CopyComplete
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\WatchdogLib.dll
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\bin\Debug\WatchdogLib.pdb
+C:\Users\kblim\Projects\IDBPOSIf\IDBPOSIf\IDBPOSIf\obj\Debug\IDBPOSIf.frmWebsocketTest.resources

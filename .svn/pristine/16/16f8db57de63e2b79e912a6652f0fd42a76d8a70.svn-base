@@ -1,0 +1,96 @@
+﻿Public Class frmSettings
+
+
+    Private Sub cmdSave_Click(sender As Object, e As EventArgs) Handles cmdSave.Click
+
+        ReadSetting.Write("Interface Server", "ServerUrl", Me.txtServerAddress.Text)
+        ReadSetting.Write("Interface Server", "cashierPrinter", Me.txtCashierPrinterIP.Text)
+        ReadSetting.Write("Interface Server", "GhostscriptPath ", Me.txtScriptPath.Text)
+        ReadSetting.Write("Interface Server", "printerModel ", Me.cBoxPrinterModel.Text)
+
+        If (Me.chkServeAsPrintServer.CheckState = 0) Then
+            ReadSetting.Write("Interface Server", "ServeAsPrintServer", False)
+        Else
+            ReadSetting.Write("Interface Server", "ServeAsPrintServer", True)
+        End If
+
+        ReadSetting.Write("PrintServer", "UseWebsocket", Me.chkUseWebsocket.Checked)
+        ReadSetting.Write("PrintServer", "WebsocketAddress", Me.txtWebsocketURL.Text)
+
+        ReadSettings()
+        MsgBox("OK!  Please restart this interface program.")
+
+    End Sub
+
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+        Me.Close()
+    End Sub
+
+    Private Sub btnTestKickDrawer_Click(sender As Object, e As EventArgs) Handles btnTestKickDrawer.Click
+        Dim sErrorMsg As String = ""
+        If Not fnKickDrawer("", sErrorMsg) Then
+            MsgBox(sErrorMsg, MsgBoxStyle.Critical + MsgBoxStyle.OkOnly, "IDBPOSIf")
+        End If
+    End Sub
+
+    Private Sub frmSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.txtServerAddress.Text = msServerUrl
+        Me.txtCashierPrinterIP.Text = msCashierPrinter
+        Me.txtScriptPath.Text = msGhostscriptPath
+        Me.chkServeAsPrintServer.Checked = mbServeAsPrintServer
+        Me.cBoxPrinterModel.Text = msPrinterModel
+
+        Me.txtWebsocketURL.Text = msPrintServerUseWebsocketServerUrl
+        Me.chkUseWebsocket.Checked = mbPrintServerUseWebsocket
+
+        Me.grpPrintServerSettings.Enabled = mbServeAsPrintServer
+    End Sub
+
+    Private Sub cmdTestPrint_Click(sender As Object, e As EventArgs) Handles cmdTestPrint.Click
+        Dim fileName As String = Application.StartupPath & "\receipt.pdf"
+        Dim password As String = "..."
+        Dim username As String = "..."
+
+        Try
+            Dim startInfo As New ProcessStartInfo
+            Dim sArguments As String = " -dPrinted -dBATCH -dNOPAUSE -q -dNumCopies=1 -dDEVICEHEIGHTPOINTS=9287" & " -sDEVICE=mswinpr2 -sOutputICCProfile=default_gray.icc -sOutputFile=""%printer%" & msCashierPrinter & """" & " """ & fileName & """"
+            startInfo.Arguments = sArguments
+            startInfo.FileName = msGhostscriptPath
+            startInfo.UseShellExecute = False
+            startInfo.RedirectStandardError = True
+            startInfo.RedirectStandardOutput = True
+            startInfo.CreateNoWindow = True
+            Dim prProcess As Process = Process.Start(startInfo)
+
+            prProcess.WaitForExit(30000)
+
+            Console.WriteLine(prProcess.StandardError.ReadToEnd() + prProcess.StandardOutput.ReadToEnd())
+
+            If (prProcess.HasExited = False) Then prProcess.Kill()
+
+            Console.WriteLine(prProcess.ExitCode)
+
+            'Return Process.ExitCode == 0;
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub btnTestWebSocket_Click(sender As Object, e As EventArgs) Handles btnTestWebSocket.Click
+        frmWebsocketTest.ShowDialog(Me)
+    End Sub
+
+    Private Sub chkServeAsPrintServer_CheckedChanged(sender As Object, e As EventArgs) Handles chkServeAsPrintServer.CheckedChanged
+        If (chkServeAsPrintServer.Checked) Then
+            grpPrintServerSettings.Enabled = True
+        Else
+            grpPrintServerSettings.Enabled = False
+        End If
+
+    End Sub
+
+    Private Sub Label7_Click(sender As Object, e As EventArgs) Handles Label7.Click
+
+    End Sub
+End Class
